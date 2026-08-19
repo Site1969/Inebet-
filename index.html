@@ -7,15 +7,22 @@
 <style>
 body {background:#0f0f1a;color:#fff;font-family:Arial;margin:0;padding:0;}
 .container {padding:20px;}
+h1,h2,h3 {margin:10px 0;}
 button {border:none;border-radius:5px;padding:10px 15px;font-weight:bold;cursor:pointer;margin:5px;}
 .deposit {background:#28a745;color:#fff;}
 .withdraw {background:#dc3545;color:#fff;}
 .back {background:#2e2e3f;color:#fff;}
-.method.orange {background:#ef6c00;color:#fff;padding:15px;margin:15px 0;border-radius:8px;}
-.method.orange h3 {margin-bottom:8px;}
-.method.orange p {font-size:14px;color:#ffe0b2;}
-.method.orange button {background:#fff;color:#ef6c00;font-weight:bold;border:none;border-radius:5px;padding:5px 10px;cursor:pointer;margin-left:8px;}
+.tabs button {background:#2e2e3f;color:#fff;margin-right:5px;}
+.method {background:#1c1c2b;padding:15px;margin:15px 0;border-radius:8px;}
+.method img {width:120px;display:block;margin-bottom:10px;}
+.method h3 {margin-bottom:8px;}
+.method p {font-size:14px;color:#ffe0b2;}
+.method button {background:#fff;color:#ef6c00;font-weight:bold;border:none;border-radius:5px;padding:5px 10px;cursor:pointer;margin-left:8px;}
 .copiado {font-size:12px;color:#fff;margin-left:10px;display:none;}
+.lobby {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;}
+.game-card {background:#1c1c2b;border-radius:8px;padding:10px;text-align:center;cursor:pointer;}
+.game-card img {width:100%;border-radius:8px;}
+.game-card h4 {margin:10px 0;}
 </style>
 <script>
 // Função copiar valores
@@ -28,47 +35,88 @@ function copySingle(id,msgId){
   });
 }
 
-// Navegação simples
-function openDeposit(){
+// Navegação
+function showPanel(panel){
+  document.getElementById("loginPanel").style.display="none";
   document.getElementById("userPanel").style.display="none";
-  document.getElementById("depositPanel").style.display="block";
-}
-function goBack(){
   document.getElementById("depositPanel").style.display="none";
-  document.getElementById("userPanel").style.display="block";
+  document.getElementById(panel).style.display="block";
 }
 
 // Ao clicar em qualquer jogo → mensagem + redirecionamento
 function openGame(game){
   alert("Para começar a jogar e aproveitar toda a diversão da Inebet, faça primeiro o seu depósito!");
-  document.getElementById("userPanel").style.display="none";
-  document.getElementById("depositPanel").style.display="block";
+  showPanel("depositPanel");
 }
 </script>
 </head>
 <body>
 
+<!-- Tela inicial -->
+<div id="loginPanel" class="container">
+  <h1>Bem-vindo à Inebet</h1>
+  <p>A tua casa de apostas online.</p>
+  <h2>Entrar</h2>
+  <form onsubmit="event.preventDefault();showPanel('userPanel');">
+    <input type="text" placeholder="Número de telefone" required>
+    <input type="password" placeholder="Palavra-passe" required>
+    <button type="submit">ENTRAR</button>
+  </form>
+  <h2>Criar conta</h2>
+  <form onsubmit="event.preventDefault();alert('Conta criada!');">
+    <input type="text" placeholder="Número de telefone (+244...)" required>
+    <input type="password" placeholder="Palavra-passe" required>
+    <button type="submit">INSCREVER-SE</button>
+  </form>
+</div>
+
 <!-- Painel do utilizador -->
-<div id="userPanel" class="container">
-  <h2>Saldo Inebet: 5000 Kz</h2>
-  <button class="deposit" onclick="openDeposit()">DEPÓSITO</button>
+<div id="userPanel" class="container" style="display:none;">
+  <h2>Saldo Inebet: 0 Kz</h2>
+  <button class="deposit" onclick="showPanel('depositPanel')">DEPÓSITO</button>
   <button class="withdraw">RETIRAR</button>
   <h3>Lobby de Jogos</h3>
-  <button onclick="openGame('aviator')">Aviator</button>
-  <button onclick="openGame('avi')">AVI</button>
-  <button onclick="openGame('bacbo')">BÁC BÓ</button>
-  <button onclick="openGame('redjet')">Red Jet</button>
-  <button onclick="openGame('crash')">Crash Infinity</button>
-  <button onclick="openGame('spaceman')">Spaceman</button>
-  <p><strong>Histórico</strong> | <strong>Perfil</strong> | <strong>Mensagens</strong></p>
+  <div class="lobby">
+    <div class="game-card" onclick="openGame('aviator')">
+      <img src="aviator.jpg" alt="Aviator">
+      <h4>Aviator</h4>
+    </div>
+    <div class="game-card" onclick="openGame('avi')">
+      <img src="avi.jpg" alt="AVI">
+      <h4>AVI</h4>
+    </div>
+    <div class="game-card" onclick="openGame('bacbo')">
+      <img src="bacbo.jpg" alt="Bác Bó">
+      <h4>BÁC BÓ</h4>
+    </div>
+    <div class="game-card" onclick="openGame('redjet')">
+      <img src="redjet.jpg" alt="Red Jet">
+      <h4>Red Jet</h4>
+    </div>
+    <div class="game-card" onclick="openGame('crash')">
+      <img src="crash.jpg" alt="Crash Infinity">
+      <h4>Crash Infinity</h4>
+    </div>
+    <div class="game-card" onclick="openGame('spaceman')">
+      <img src="spaceman.jpg" alt="Spaceman">
+      <h4>Spaceman</h4>
+    </div>
+  </div>
 </div>
 
 <!-- Gestão do saldo -->
 <div id="depositPanel" class="container" style="display:none;">
-  <button class="back" onclick="goBack()">&lt;</button>
+  <button class="back" onclick="showPanel('userPanel')">&lt;</button>
   <h2>Gestão do Saldo</h2>
+  <div class="tabs">
+    <button class="active">DEPÓSITO</button>
+    <button>RETIRAR</button>
+    <button>HISTÓRICO DE TRANSAÇÕES</button>
+  </div>
 
-  <div class="method orange">
+  <!-- Express -->
+  <div class="method">
+    <img src="express_logo.png" alt="Express">
     <h3>Express</h3>
     <p>Entidade: <strong id="entExpress">00930</strong>
       <button onclick="copySingle('entExpress','msgEntExpress')">Copiar</button>
@@ -76,10 +124,11 @@ function openGame(game){
     <p>Referência: <strong id="refExpress">944169923</strong>
       <button onclick="copySingle('refExpress','msgRefExpress')">Copiar</button>
       <span id="msgRefExpress" class="copiado">Copiado</span></p>
-    <p>A casa de apostas vai creditar o saldo na sua conta da Inebet.</p>
   </div>
 
-  <div class="method orange">
+  <!-- Multicaixa -->
+  <div class="method">
+    <img src="multicaixa_logo.png" alt="Multicaixa">
     <h3>Multicaixa</h3>
     <p>Entidade: <strong id="entMulticaixa">00930</strong>
       <button onclick="copySingle('entMulticaixa','msgEntMulticaixa')">Copiar</button>
@@ -87,10 +136,11 @@ function openGame(game){
     <p>Referência: <strong id="refMulticaixa">944169923</strong>
       <button onclick="copySingle('refMulticaixa','msgRefMulticaixa')">Copiar</button>
       <span id="msgRefMulticaixa" class="copiado">Copiado</span></p>
-    <p>A casa de apostas vai creditar o saldo na sua conta da Inebet.</p>
   </div>
 
-  <div class="method orange">
+  <!-- Unitel Money -->
+  <div class="method">
+    <img src="unitel_money_logo.png" alt="Unitel Money">
     <h3>Unitel Money</h3>
     <p>Entidade: <strong id="entUnitel">00930</strong>
       <button onclick="copySingle('entUnitel','msgEntUnitel')">Copiar</button>
@@ -98,10 +148,8 @@ function openGame(game){
     <p>Referência: <strong id="refUnitel">944169923</strong>
       <button onclick="copySingle('refUnitel','msgRefUnitel')">Copiar</button>
       <span id="msgRefUnitel" class="copiado">Copiado</span></p>
-    <p>A casa de apostas vai creditar o saldo na sua conta da Inebet.</p>
   </div>
 </div>
 
 </body>
-  </html>
-  
+</html>
