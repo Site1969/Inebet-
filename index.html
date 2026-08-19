@@ -6,76 +6,65 @@
 <title>Inebet - Casa de Apostas</title>
 <style>
 body {background:#0f0f1a;color:#fff;font-family:Arial;margin:0;padding:0;}
-.container {padding:20px;}
+.container {padding:20px;text-align:center;}
 h1,h2,h3 {margin:10px 0;}
-button {border:none;border-radius:5px;padding:10px 15px;font-weight:bold;cursor:pointer;margin:5px;}
-.deposit {background:#28a745;color:#fff;}
-.withdraw {background:#dc3545;color:#fff;}
-.back {background:#2e2e3f;color:#fff;}
-.tabs button {background:#2e2e3f;color:#fff;margin-right:5px;}
-.method {background:#1c1c2b;padding:15px;margin:15px 0;border-radius:8px;}
-.method img {width:120px;display:block;margin-bottom:10px;}
-.method h3 {margin-bottom:8px;}
-.method p {font-size:14px;color:#ffe0b2;}
-.method button {background:#fff;color:#ef6c00;font-weight:bold;border:none;border-radius:5px;padding:5px 10px;cursor:pointer;margin-left:8px;}
-.copiado {font-size:12px;color:#fff;margin-left:10px;display:none;}
-.lobby {display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;}
-.game-card {background:#1c1c2b;border-radius:8px;padding:10px;text-align:center;cursor:pointer;}
-.game-card img {width:100%;border-radius:8px;}
-.game-card h4 {margin:10px 0;}
+/* Campos de login */
+input {
+  width: 80%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #000;
+}
+/* Botões chamativos */
+button {border:none;border-radius:5px;padding:12px 20px;font-weight:bold;cursor:pointer;margin:8px;}
+button.login {background:#28a745;color:#fff;}   /* verde */
+button.register {background:#ff9800;color:#fff;} /* laranja */
 </style>
 <script>
-// Função copiar valores
-function copySingle(id,msgId){
-  const texto=document.getElementById(id).innerText;
-  navigator.clipboard.writeText(texto).then(()=>{
-    const msg=document.getElementById(msgId);
-    msg.style.display="inline";
-    setTimeout(()=>{msg.style.display="none";},2000);
-  });
-}
-
-// Navegação
+// Navegação entre painéis
 function showPanel(panel){
   document.getElementById("loginPanel").style.display="none";
   document.getElementById("userPanel").style.display="none";
   document.getElementById("depositPanel").style.display="none";
   document.getElementById(panel).style.display="block";
 }
-
-// Ao clicar em qualquer jogo → mensagem + redirecionamento
-function openGame(game){
-  alert("Para começar a jogar e aproveitar toda a diversão da Inebet, faça primeiro o seu depósito!");
-  showPanel("depositPanel");
-}
 </script>
 </head>
 <body>
 
-<!-- Tela inicial -->
+<!-- Tela inicial / login -->
 <div id="loginPanel" class="container">
+  <img src="logo_inebet.png" alt="Logótipo Inebet" style="width:150px;margin-bottom:20px;">
   <h1>Bem-vindo à Inebet</h1>
   <p>A tua casa de apostas online.</p>
   <h2>Entrar</h2>
   <form onsubmit="event.preventDefault();showPanel('userPanel');">
     <input type="text" placeholder="Número de telefone" required>
     <input type="password" placeholder="Palavra-passe" required>
-    <button type="submit">ENTRAR</button>
+    <button type="submit" class="login">ENTRAR</button>
   </form>
   <h2>Criar conta</h2>
   <form onsubmit="event.preventDefault();alert('Conta criada!');">
     <input type="text" placeholder="Número de telefone (+244...)" required>
     <input type="password" placeholder="Palavra-passe" required>
-    <button type="submit">INSCREVER-SE</button>
+    <button type="submit" class="register">INSCREVER-SE</button>
   </form>
 </div>
-
 <!-- Painel do utilizador -->
 <div id="userPanel" class="container" style="display:none;">
-  <h2>Saldo Inebet: 0 Kz</h2>
-  <button class="deposit" onclick="showPanel('depositPanel')">DEPÓSITO</button>
-  <button class="withdraw">RETIRAR</button>
+  <!-- Saldo inicial 0 Kz -->
+  <h2 id="saldo" data-value="0">Saldo Inebet: 0 Kz</h2>
+  
+  <!-- Botões principais -->
+  <button class="login" onclick="showPanel('depositPanel')">DEPÓSITO</button>
+  <button class="register">RETIRAR</button>
+  
   <h3>Lobby de Jogos</h3>
+  
+  <!-- Grelha de jogos -->
   <div class="lobby">
     <div class="game-card" onclick="openGame('aviator')">
       <img src="aviator.jpg" alt="Aviator">
@@ -103,18 +92,19 @@ function openGame(game){
     </div>
   </div>
 </div>
-
 <!-- Gestão do saldo -->
 <div id="depositPanel" class="container" style="display:none;">
   <button class="back" onclick="showPanel('userPanel')">&lt;</button>
   <h2>Gestão do Saldo</h2>
+  
+  <!-- Tabs superiores -->
   <div class="tabs">
     <button class="active">DEPÓSITO</button>
     <button>RETIRAR</button>
     <button>HISTÓRICO DE TRANSAÇÕES</button>
   </div>
 
-  <!-- Express -->
+  <!-- Método Express -->
   <div class="method">
     <img src="express_logo.png" alt="Express">
     <h3>Express</h3>
@@ -126,7 +116,7 @@ function openGame(game){
       <span id="msgRefExpress" class="copiado">Copiado</span></p>
   </div>
 
-  <!-- Multicaixa -->
+  <!-- Método Multicaixa -->
   <div class="method">
     <img src="multicaixa_logo.png" alt="Multicaixa">
     <h3>Multicaixa</h3>
@@ -138,7 +128,7 @@ function openGame(game){
       <span id="msgRefMulticaixa" class="copiado">Copiado</span></p>
   </div>
 
-  <!-- Unitel Money -->
+  <!-- Método Unitel Money -->
   <div class="method">
     <img src="unitel_money_logo.png" alt="Unitel Money">
     <h3>Unitel Money</h3>
@@ -150,6 +140,46 @@ function openGame(game){
       <span id="msgRefUnitel" class="copiado">Copiado</span></p>
   </div>
 </div>
+<script>
+// Função copiar valores (entidade e referência)
+function copySingle(id,msgId){
+  const texto=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(texto).then(()=>{
+    const msg=document.getElementById(msgId);
+    msg.style.display="inline";
+    setTimeout(()=>{msg.style.display="none";},2000);
+  });
+}
 
+// Navegação entre painéis
+function showPanel(panel){
+  document.getElementById("loginPanel").style.display="none";
+  document.getElementById("userPanel").style.display="none";
+  document.getElementById("depositPanel").style.display="none";
+  document.getElementById(panel).style.display="block";
+}
+
+// Abrir jogos com desbloqueio automático
+function openGame(game){
+  const saldo = parseInt(document.getElementById("saldo").dataset.value);
+  if(saldo > 0){
+    alert("Jogo desbloqueado! Abrindo iframe...");
+    // Aqui podes abrir o iframe real do jogo
+    // Exemplo: window.open("url_do_jogo_"+game, "_blank");
+  } else {
+    alert("Para começar a jogar e aproveitar toda a diversão da Inebet, faça primeiro o seu depósito!");
+    showPanel("depositPanel");
+  }
+}
+
+// Exemplo de atualização de saldo (simulação)
+function atualizarSaldo(valor){
+  const saldoElem = document.getElementById("saldo");
+  let saldoAtual = parseInt(saldoElem.dataset.value);
+  saldoAtual += valor;
+  saldoElem.dataset.value = saldoAtual;
+  saldoElem.innerText = "Saldo Inebet: " + saldoAtual + " Kz";
+}
+</script>
 </body>
 </html>
