@@ -14,17 +14,19 @@ input {
   padding: 12px;
   margin: 8px 0;
   border-radius: 5px;
-  border: 1px solid #ccc;
-  background: #fff;
-  color: #000;
+  border: 1px solid #333;
+  background: #1c1c2b;
+  color: #fff;
 }
-/* Botões chamativos */
-button {border:none;border-radius:5px;padding:12px 20px;font-weight:bold;cursor:pointer;margin:8px;}
-button.login {background:#28a745;color:#fff;}   /* verde */
-button.register {background:#ff9800;color:#fff;} /* laranja */
+/* Botões principais */
+button {border:none;border-radius:8px;padding:12px 20px;font-weight:bold;cursor:pointer;margin:8px;}
+button.login, button.register {
+  background:#ff008c; /* rosa vivo */
+  color:#fff;
+  box-shadow:0 0 10px rgba(255,0,140,0.5);
+}
 </style>
 <script>
-// Navegação entre painéis
 function showPanel(panel){
   document.getElementById("loginPanel").style.display="none";
   document.getElementById("userPanel").style.display="none";
@@ -55,40 +57,26 @@ function showPanel(panel){
 </div>
 <!-- Painel do utilizador -->
 <div id="userPanel" class="container" style="display:none;">
-  <!-- Saldo inicial 0 Kz -->
   <h2 id="saldo" data-value="0">Saldo Inebet: 0 Kz</h2>
-  
-  <!-- Botões principais -->
   <button class="login" onclick="showPanel('depositPanel')">DEPÓSITO</button>
   <button class="register">RETIRAR</button>
-  
   <h3>Lobby de Jogos</h3>
-  
-  <!-- Grelha de jogos -->
   <div class="lobby">
     <div class="game-card" onclick="openGame('aviator')">
       <img src="aviator.jpg" alt="Aviator">
       <h4>Aviator</h4>
     </div>
-    <div class="game-card" onclick="openGame('avi')">
-      <img src="avi.jpg" alt="AVI">
-      <h4>AVI</h4>
-    </div>
-    <div class="game-card" onclick="openGame('bacbo')">
-      <img src="bacbo.jpg" alt="Bác Bó">
-      <h4>BÁC BÓ</h4>
-    </div>
-    <div class="game-card" onclick="openGame('redjet')">
-      <img src="redjet.jpg" alt="Red Jet">
-      <h4>Red Jet</h4>
-    </div>
-    <div class="game-card" onclick="openGame('crash')">
-      <img src="crash.jpg" alt="Crash Infinity">
-      <h4>Crash Infinity</h4>
+    <div class="game-card" onclick="openGame('jetx')">
+      <img src="jetx.jpg" alt="JetX">
+      <h4>JetX</h4>
     </div>
     <div class="game-card" onclick="openGame('spaceman')">
       <img src="spaceman.jpg" alt="Spaceman">
       <h4>Spaceman</h4>
+    </div>
+    <div class="game-card" onclick="openGame('crash')">
+      <img src="crash.jpg" alt="Crash Infinity">
+      <h4>Crash Infinity</h4>
     </div>
   </div>
 </div>
@@ -96,15 +84,13 @@ function showPanel(panel){
 <div id="depositPanel" class="container" style="display:none;">
   <button class="back" onclick="showPanel('userPanel')">&lt;</button>
   <h2>Gestão do Saldo</h2>
-  
-  <!-- Tabs superiores -->
   <div class="tabs">
     <button class="active">DEPÓSITO</button>
     <button>RETIRAR</button>
     <button>HISTÓRICO DE TRANSAÇÕES</button>
   </div>
 
-  <!-- Método Express -->
+  <!-- Express -->
   <div class="method">
     <img src="express_logo.png" alt="Express">
     <h3>Express</h3>
@@ -116,7 +102,7 @@ function showPanel(panel){
       <span id="msgRefExpress" class="copiado">Copiado</span></p>
   </div>
 
-  <!-- Método Multicaixa -->
+  <!-- Multicaixa -->
   <div class="method">
     <img src="multicaixa_logo.png" alt="Multicaixa">
     <h3>Multicaixa</h3>
@@ -128,7 +114,7 @@ function showPanel(panel){
       <span id="msgRefMulticaixa" class="copiado">Copiado</span></p>
   </div>
 
-  <!-- Método Unitel Money -->
+  <!-- Unitel Money -->
   <div class="method">
     <img src="unitel_money_logo.png" alt="Unitel Money">
     <h3>Unitel Money</h3>
@@ -141,7 +127,6 @@ function showPanel(panel){
   </div>
 </div>
 <script>
-// Função copiar valores (entidade e referência)
 function copySingle(id,msgId){
   const texto=document.getElementById(id).innerText;
   navigator.clipboard.writeText(texto).then(()=>{
@@ -151,28 +136,17 @@ function copySingle(id,msgId){
   });
 }
 
-// Navegação entre painéis
-function showPanel(panel){
-  document.getElementById("loginPanel").style.display="none";
-  document.getElementById("userPanel").style.display="none";
-  document.getElementById("depositPanel").style.display="none";
-  document.getElementById(panel).style.display="block";
-}
-
-// Abrir jogos com desbloqueio automático
 function openGame(game){
   const saldo = parseInt(document.getElementById("saldo").dataset.value);
   if(saldo > 0){
     alert("Jogo desbloqueado! Abrindo iframe...");
     // Aqui podes abrir o iframe real do jogo
-    // Exemplo: window.open("url_do_jogo_"+game, "_blank");
   } else {
     alert("Para começar a jogar e aproveitar toda a diversão da Inebet, faça primeiro o seu depósito!");
     showPanel("depositPanel");
   }
 }
 
-// Exemplo de atualização de saldo (simulação)
 function atualizarSaldo(valor){
   const saldoElem = document.getElementById("saldo");
   let saldoAtual = parseInt(saldoElem.dataset.value);
