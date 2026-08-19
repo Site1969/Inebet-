@@ -5,21 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inebet - Casa de Apostas</title>
 <style>
-body {background:#0f0f1a;color:#fff;font-family:Arial;margin:0;padding:0;}
+body {
+  background:#0f0f1a;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  margin:0;
+  padding:0;
+}
 .container {padding:20px;text-align:center;}
 h1,h2,h3 {margin:10px 0;}
+
 /* Campos de login */
 input {
-  width: 80%;
+  width: 90%;
   padding: 12px;
   margin: 8px 0;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 1px solid #333;
   background: #1c1c2b;
   color: #fff;
 }
-/* Botões principais */
-button {border:none;border-radius:8px;padding:12px 20px;font-weight:bold;cursor:pointer;margin:8px;}
+
+/* Botões principais iguais Elephant Bet */
+button {
+  border:none;
+  border-radius:8px;
+  padding:12px 20px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:8px;
+}
 button.login, button.register {
   background:#ff008c; /* rosa vivo */
   color:#fff;
@@ -42,41 +57,46 @@ function showPanel(panel){
   <img src="logo_inebet.png" alt="Logótipo Inebet" style="width:150px;margin-bottom:20px;">
   <h1>Bem-vindo à Inebet</h1>
   <p>A tua casa de apostas online.</p>
-  <h2>Entrar</h2>
   <form onsubmit="event.preventDefault();showPanel('userPanel');">
     <input type="text" placeholder="Número de telefone" required>
     <input type="password" placeholder="Palavra-passe" required>
     <button type="submit" class="login">ENTRAR</button>
-  </form>
-  <h2>Criar conta</h2>
-  <form onsubmit="event.preventDefault();alert('Conta criada!');">
-    <input type="text" placeholder="Número de telefone (+244...)" required>
-    <input type="password" placeholder="Palavra-passe" required>
-    <button type="submit" class="register">INSCREVER-SE</button>
+    <button type="button" class="register" onclick="alert('Conta criada!')">INSCREVER-SE</button>
   </form>
 </div>
 <!-- Painel do utilizador -->
 <div id="userPanel" class="container" style="display:none;">
+  <!-- Saldo -->
   <h2 id="saldo" data-value="0">Saldo Inebet: 0 Kz</h2>
   <button class="login" onclick="showPanel('depositPanel')">DEPÓSITO</button>
   <button class="register">RETIRAR</button>
-  <h3>Lobby de Jogos</h3>
-  <div class="lobby">
-    <div class="game-card" onclick="openGame('aviator')">
-      <img src="aviator.jpg" alt="Aviator">
-      <h4>Aviator</h4>
+  
+  <!-- Lobby de Jogos -->
+  <h3>Jogos em destaque</h3>
+  <div class="lobby" style="display:flex;overflow-x:auto;gap:15px;padding:10px;">
+    
+    <!-- Aviator -->
+    <div class="game-card" onclick="openGame('aviator')" style="min-width:200px;">
+      <img src="aviator.jpg" alt="Aviator" style="width:100%;border-radius:10px;">
+      <h4>Aviator - SPRIBE</h4>
     </div>
-    <div class="game-card" onclick="openGame('jetx')">
-      <img src="jetx.jpg" alt="JetX">
-      <h4>JetX</h4>
+    
+    <!-- JetX -->
+    <div class="game-card" onclick="openGame('jetx')" style="min-width:200px;">
+      <img src="jetx.jpg" alt="JetX" style="width:100%;border-radius:10px;">
+      <h4>JetX - SPRIBE</h4>
     </div>
-    <div class="game-card" onclick="openGame('spaceman')">
-      <img src="spaceman.jpg" alt="Spaceman">
-      <h4>Spaceman</h4>
+    
+    <!-- Spaceman -->
+    <div class="game-card" onclick="openGame('spaceman')" style="min-width:200px;">
+      <img src="spaceman.jpg" alt="Spaceman" style="width:100%;border-radius:10px;">
+      <h4>Spaceman - Pragmatic</h4>
     </div>
-    <div class="game-card" onclick="openGame('crash')">
-      <img src="crash.jpg" alt="Crash Infinity">
-      <h4>Crash Infinity</h4>
+    
+    <!-- Crash Infinity -->
+    <div class="game-card" onclick="openGame('crash')" style="min-width:200px;">
+      <img src="crash.jpg" alt="Crash Infinity" style="width:100%;border-radius:10px;">
+      <h4>Crash Infinity - Evolution</h4>
     </div>
   </div>
 </div>
@@ -84,49 +104,52 @@ function showPanel(panel){
 <div id="depositPanel" class="container" style="display:none;">
   <button class="back" onclick="showPanel('userPanel')">&lt;</button>
   <h2>Gestão do Saldo</h2>
-  <div class="tabs">
+  
+  <!-- Tabs superiores -->
+  <div class="tabs" style="margin-bottom:20px;">
     <button class="active">DEPÓSITO</button>
     <button>RETIRAR</button>
     <button>HISTÓRICO DE TRANSAÇÕES</button>
   </div>
 
-  <!-- Express -->
-  <div class="method">
-    <img src="express_logo.png" alt="Express">
+  <!-- Método Express -->
+  <div class="method" style="margin-bottom:20px;">
+    <img src="express_logo.png" alt="Express" style="width:100px;">
     <h3>Express</h3>
     <p>Entidade: <strong id="entExpress">00930</strong>
       <button onclick="copySingle('entExpress','msgEntExpress')">Copiar</button>
-      <span id="msgEntExpress" class="copiado">Copiado</span></p>
+      <span id="msgEntExpress" class="copiado" style="display:none;">Copiado</span></p>
     <p>Referência: <strong id="refExpress">944169923</strong>
       <button onclick="copySingle('refExpress','msgRefExpress')">Copiar</button>
-      <span id="msgRefExpress" class="copiado">Copiado</span></p>
+      <span id="msgRefExpress" class="copiado" style="display:none;">Copiado</span></p>
   </div>
 
-  <!-- Multicaixa -->
-  <div class="method">
-    <img src="multicaixa_logo.png" alt="Multicaixa">
+  <!-- Método Multicaixa -->
+  <div class="method" style="margin-bottom:20px;">
+    <img src="multicaixa_logo.png" alt="Multicaixa" style="width:100px;">
     <h3>Multicaixa</h3>
     <p>Entidade: <strong id="entMulticaixa">00930</strong>
       <button onclick="copySingle('entMulticaixa','msgEntMulticaixa')">Copiar</button>
-      <span id="msgEntMulticaixa" class="copiado">Copiado</span></p>
+      <span id="msgEntMulticaixa" class="copiado" style="display:none;">Copiado</span></p>
     <p>Referência: <strong id="refMulticaixa">944169923</strong>
       <button onclick="copySingle('refMulticaixa','msgRefMulticaixa')">Copiar</button>
-      <span id="msgRefMulticaixa" class="copiado">Copiado</span></p>
+      <span id="msgRefMulticaixa" class="copiado" style="display:none;">Copiado</span></p>
   </div>
 
-  <!-- Unitel Money -->
+  <!-- Método Unitel Money -->
   <div class="method">
-    <img src="unitel_money_logo.png" alt="Unitel Money">
+    <img src="unitel_money_logo.png" alt="Unitel Money" style="width:100px;">
     <h3>Unitel Money</h3>
     <p>Entidade: <strong id="entUnitel">00930</strong>
       <button onclick="copySingle('entUnitel','msgEntUnitel')">Copiar</button>
-      <span id="msgEntUnitel" class="copiado">Copiado</span></p>
+      <span id="msgEntUnitel" class="copiado" style="display:none;">Copiado</span></p>
     <p>Referência: <strong id="refUnitel">944169923</strong>
       <button onclick="copySingle('refUnitel','msgRefUnitel')">Copiar</button>
-      <span id="msgRefUnitel" class="copiado">Copiado</span></p>
+      <span id="msgRefUnitel" class="copiado" style="display:none;">Copiado</span></p>
   </div>
 </div>
 <script>
+// Função para copiar entidade/referência
 function copySingle(id,msgId){
   const texto=document.getElementById(id).innerText;
   navigator.clipboard.writeText(texto).then(()=>{
@@ -136,6 +159,7 @@ function copySingle(id,msgId){
   });
 }
 
+// Função para abrir jogos
 function openGame(game){
   const saldo = parseInt(document.getElementById("saldo").dataset.value);
   if(saldo > 0){
@@ -147,6 +171,7 @@ function openGame(game){
   }
 }
 
+// Função para atualizar saldo
 function atualizarSaldo(valor){
   const saldoElem = document.getElementById("saldo");
   let saldoAtual = parseInt(saldoElem.dataset.value);
@@ -157,3 +182,84 @@ function atualizarSaldo(valor){
 </script>
 </body>
 </html>
+<style>
+/* Barra inferior de navegação */
+.bottom-bar {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#1c1c2b;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  border-top:1px solid #333;
+}
+.bottom-bar button {
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.bottom-bar button:hover {color:#ff008c;}
+
+/* Secções adicionais */
+.section {
+  margin:20px 0;
+  padding:10px;
+  background:#1c1c2b;
+  border-radius:10px;
+}
+.section h3 {
+  color:#ff008c;
+  margin-bottom:10px;
+}
+.section .item {
+  display:inline-block;
+  margin:5px;
+  padding:10px;
+  background:#2a2a3d;
+  border-radius:8px;
+  color:#fff;
+}
+</style>
+<!-- Barra inferior -->
+<div class="bottom-bar">
+  <button onclick="alert('Desportos')">
+    <img src="icon_sports.png" alt="Desportos" style="width:24px;">
+    Desportos
+  </button>
+  <button onclick="alert('Casino ao Vivo')">
+    <img src="icon_live.png" alt="Casino ao Vivo" style="width:24px;">
+    Ao Vivo
+  </button>
+  <button onclick="alert('Jogos')">
+    <img src="icon_games.png" alt="Jogos" style="width:24px;">
+    Jogos
+  </button>
+  <button onclick="openGame('aviator')">
+    <img src="icon_aviator.png" alt="Aviator" style="width:24px;">
+    Aviator
+  </button>
+  <button onclick="alert('Casino')">
+    <img src="icon_casino.png" alt="Casino" style="width:24px;">
+    Casino
+  </button>
+</div>
+
+<!-- Secções adicionais -->
+<div class="section">
+  <h3>Casino Top</h3>
+  <div class="item">Roleta</div>
+  <div class="item">Blackjack</div>
+  <div class="item">Poker</div>
+</div>
+
+<div class="section">
+  <h3>Torneios</h3>
+  <div class="item">Torneio Aviator</div>
+  <div class="item">Torneio Spaceman</div>
+</div>
