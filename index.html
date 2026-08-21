@@ -1,1 +1,872 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOTGPT</title>
 
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#070b18;
+    color:#fff;
+    font-family:Arial,sans-serif;
+}
+
+.app{
+    max-width:520px;
+    margin:auto;
+    min-height:100vh;
+    padding:20px;
+}
+
+.card{
+    background:#11182b;
+    border:1px solid #26314d;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:16px;
+    box-shadow:0 10px 30px #0005;
+}
+
+h1{
+    margin:0 0 6px;
+    font-size:28px;
+}
+
+h2{
+    margin-top:0;
+}
+
+h3{
+    margin-top:0;
+}
+
+.muted{
+    color:#9da9c5;
+    font-size:14px;
+}
+
+label{
+    display:block;
+    margin:14px 0 6px;
+    color:#cbd4e8;
+    font-size:14px;
+}
+
+input,
+button,
+select{
+    width:100%;
+    padding:13px;
+    border-radius:10px;
+    border:1px solid #34415f;
+    background:#0b1120;
+    color:#fff;
+    font-size:15px;
+}
+
+button{
+    cursor:pointer;
+    background:#235ee7;
+    border:0;
+    font-weight:700;
+    margin-top:12px;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+button.secondary{
+    background:#222d45;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.status{
+    padding:14px;
+    border-radius:10px;
+    background:#18223a;
+    margin-top:14px;
+}
+
+.dot{
+    display:inline-block;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#777;
+    margin-right:8px;
+}
+
+.active .dot{
+    background:#2ee66b;
+}
+
+.balance{
+    font-size:25px;
+    font-weight:700;
+    margin-top:5px;
+}
+
+.hidden{
+    display:none;
+}
+
+.result{
+    font-size:30px;
+    font-weight:800;
+    text-align:center;
+    margin:16px 0;
+}
+
+.small{
+    font-size:12px;
+    color:#8f9bb5;
+    text-align:center;
+    margin-top:16px;
+}
+
+.message{
+    margin-top:10px;
+    min-height:20px;
+}
+
+.info-box{
+    background:#0b1120;
+    border:1px solid #26314d;
+    border-radius:10px;
+    padding:12px;
+    margin-top:12px;
+    color:#b9c4da;
+    font-size:13px;
+}
+
+.user-info{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.user-name{
+    color:#fff;
+    font-weight:bold;
+}
+
+.badge{
+    background:#235ee7;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<main class="app">
+
+<!-- CABEÇALHO -->
+
+<section class="card">
+
+<h1>BOTGPT</h1>
+
+<div class="muted">
+Reconstrução estrutural do BOTGPT
+</div>
+
+</section>
+
+
+<!-- LOGIN -->
+
+<section class="card" id="loginCard">
+
+<h2>Login</h2>
+
+<label for="user">
+Utilizador
+</label>
+
+<input
+    id="user"
+    autocomplete="username"
+    placeholder="Digite o utilizador"
+>
+
+<label for="pass">
+Palavra-passe
+</label>
+
+<input
+    id="pass"
+    type="password"
+    autocomplete="current-password"
+    placeholder="Digite a palavra-passe"
+>
+
+<button onclick="login()">
+ENTRAR
+</button>
+
+<div
+    id="loginMsg"
+    class="muted message"
+></div>
+
+<div class="info-box">
+    O login desta reconstrução funciona apenas localmente.
+    A palavra-passe não é enviada para nenhum servidor.
+</div>
+
+</section>
+
+
+<!-- BOT -->
+
+<section class="card hidden" id="botCard">
+
+<div class="user-info">
+
+<div>
+<span class="muted">Utilizador</span><br>
+<span id="userView" class="user-name">—</span>
+</div>
+
+<span class="badge">
+BOTGPT
+</span>
+
+</div>
+
+
+<h2>Bot</h2>
+
+
+<!-- MODELOS -->
+
+<div class="row">
+
+<button
+    onclick="selectModel('PRO')"
+    id="proBtn"
+>
+PRO
+</button>
+
+<button
+    onclick="selectModel('MAX')"
+    id="maxBtn"
+    class="secondary"
+>
+PRO MAX
+</button>
+
+</div>
+
+
+<!-- ESTADO -->
+
+<div
+    class="status"
+    id="status"
+>
+
+<span class="dot"></span>
+
+<span id="statusText">
+ESTADO DO BOT: DESATIVADO
+</span>
+
+</div>
+
+
+<!-- SALDO -->
+
+<label for="balance">
+Saldo
+</label>
+
+<input
+    id="balance"
+    inputmode="decimal"
+    placeholder="0,00 KZ"
+    oninput="updateBalance()"
+>
+
+<div
+    class="balance"
+    id="balanceView"
+>
+0,00 KZ
+</div>
+
+
+<!-- ATIVAR -->
+
+<button onclick="activateBot()">
+ATIVAR BOT
+</button>
+
+
+<!-- NOVA OPERAÇÃO -->
+
+<button
+    class="secondary"
+    onclick="newPrediction()"
+>
+NOVA PREVISÃO
+</button>
+
+
+<!-- RESULTADO -->
+
+<div
+    id="prediction"
+    class="result"
+>
+—
+</div>
+
+
+<div
+    id="predictionInfo"
+    class="muted"
+    style="text-align:center"
+>
+Faça uma previsão depois de ativar o bot.
+</div>
+
+
+<!-- INFORMAÇÕES -->
+
+<div class="info-box">
+
+Modelo atual:
+<strong id="modelView">PRO</strong>
+
+<br><br>
+
+Estado:
+<strong id="stateView">Desativado</strong>
+
+</div>
+
+</section>
+
+
+<!-- COMPONENTES -->
+
+<section
+    class="card hidden"
+    id="linksCard"
+>
+
+<h3>Componentes</h3>
+
+<button
+    class="secondary"
+    onclick="openExternal('https://example.invalid/')"
+>
+ABRIR ENDEREÇO DE TESTE
+</button>
+
+<button
+    class="secondary"
+    onclick="logout()"
+>
+SAIR
+</button>
+
+</section>
+
+
+<!-- RODAPÉ -->
+
+<div class="small">
+
+Reconstrução baseada nos componentes identificados
+no BOTGPT.
+
+<br><br>
+
+Esta versão não envia palavras-passe,
+credenciais ou dados de login para terceiros.
+
+</div>
+
+</main>
+
+
+<script>
+
+"use strict";
+
+
+/*
+====================================================
+ESTADO PRINCIPAL DO BOTGPT
+====================================================
+*/
+
+const state = {
+
+    loggedIn:false,
+
+    user:"",
+
+    model:"PRO",
+
+    activated:false,
+
+    balance:0,
+
+    predictions:0
+
+};
+
+
+/*
+====================================================
+LOGIN
+====================================================
+*/
+
+function login(){
+
+    const user =
+        document
+        .getElementById("user")
+        .value
+        .trim();
+
+    const pass =
+        document
+        .getElementById("pass")
+        .value;
+
+    const msg =
+        document
+        .getElementById("loginMsg");
+
+
+    if(!user || !pass){
+
+        msg.textContent =
+            "Preencha o utilizador e a palavra-passe.";
+
+        return;
+
+    }
+
+
+    /*
+    O login é somente local.
+
+    A palavra-passe NÃO é guardada,
+    NÃO é enviada e NÃO é transmitida.
+    */
+
+    state.loggedIn = true;
+
+    state.user = user;
+
+
+    document
+        .getElementById("userView")
+        .textContent = user;
+
+
+    document
+        .getElementById("loginCard")
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById("botCard")
+        .classList
+        .remove("hidden");
+
+
+    document
+        .getElementById("linksCard")
+        .classList
+        .remove("hidden");
+
+
+    msg.textContent = "";
+
+}
+
+
+/*
+====================================================
+LOGOUT
+====================================================
+*/
+
+function logout(){
+
+    state.loggedIn = false;
+
+    state.user = "";
+
+    state.activated = false;
+
+    state.predictions = 0;
+
+    state.balance = 0;
+
+
+    document
+        .getElementById("loginCard")
+        .classList
+        .remove("hidden");
+
+
+    document
+        .getElementById("botCard")
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById("linksCard")
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById("prediction")
+        .textContent = "—";
+
+
+    document
+        .getElementById("predictionInfo")
+        .textContent =
+        "Faça uma previsão depois de ativar o bot.";
+
+
+    document
+        .getElementById("userView")
+        .textContent = "—";
+
+
+    document
+        .getElementById("balance")
+        .value = "";
+
+
+    document
+        .getElementById("balanceView")
+        .textContent =
+        "0,00 KZ";
+
+
+    setStatus(false);
+
+}
+
+
+/*
+====================================================
+SELEÇÃO DO MODELO
+====================================================
+*/
+
+function selectModel(model){
+
+    state.model = model;
+
+
+    document
+        .getElementById("proBtn")
+        .className =
+        model === "PRO"
+        ? ""
+        : "secondary";
+
+
+    document
+        .getElementById("maxBtn")
+        .className =
+        model === "MAX"
+        ? ""
+        : "secondary";
+
+
+    document
+        .getElementById("modelView")
+        .textContent = model;
+
+
+    if(state.activated){
+
+        document
+            .getElementById("predictionInfo")
+            .textContent =
+            "Modelo selecionado: " + model;
+
+    }
+
+}
+
+
+/*
+====================================================
+CONVERSÃO DE SALDO
+====================================================
+*/
+
+function parseMoney(value){
+
+    value =
+        String(value)
+        .replace(/[^\d,.-]/g,"")
+        .trim();
+
+
+    if(
+        value.includes(",")
+        &&
+        value.includes(".")
+    ){
+
+        value =
+            value
+            .replace(/\./g,"")
+            .replace(",",".");
+    }
+
+    else if(value.includes(",")){
+
+        value =
+            value.replace(",",".");
+    }
+
+
+    return Number(value) || 0;
+
+}
+
+
+/*
+====================================================
+FORMATAÇÃO DO SALDO
+====================================================
+*/
+
+function formatMoney(value){
+
+    return new Intl.NumberFormat(
+        "pt-PT",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    ).format(value) + " KZ";
+
+}
+
+
+/*
+====================================================
+ATUALIZA SALDO
+====================================================
+*/
+
+function updateBalance(){
+
+    state.balance =
+        parseMoney(
+            document
+            .getElementById("balance")
+            .value
+        );
+
+
+    document
+        .getElementById("balanceView")
+        .textContent =
+        formatMoney(state.balance);
+
+}
+
+
+/*
+====================================================
+ESTADO DO BOT
+====================================================
+*/
+
+function setStatus(active){
+
+    state.activated = active;
+
+
+    const box =
+        document
+        .getElementById("status");
+
+
+    box
+        .classList
+        .toggle("active",active);
+
+
+    document
+        .getElementById("statusText")
+        .textContent =
+        active
+        ? "ESTADO DO BOT: ATIVADO"
+        : "ESTADO DO BOT: DESATIVADO";
+
+
+    document
+        .getElementById("stateView")
+        .textContent =
+        active
+        ? "Ativado"
+        : "Desativado";
+
+}
+
+
+/*
+====================================================
+ATIVAÇÃO
+====================================================
+*/
+
+function activateBot(){
+
+    if(!state.loggedIn){
+
+        return;
+
+    }
+
+
+    setStatus(true);
+
+
+    document
+        .getElementById("predictionInfo")
+        .textContent =
+        "Modelo selecionado: "
+        + state.model;
+
+
+    document
+        .getElementById("prediction")
+        .textContent =
+        "PRONTO";
+
+}
+
+
+/*
+====================================================
+NOVA PREVISÃO
+====================================================
+
+Não contém Azul, Vermelho,
+Empate ou lógica do Bac Bo.
+
+Esta função apenas representa
+a interface local do BOTGPT.
+====================================================
+*/
+
+function newPrediction(){
+
+    if(!state.activated){
+
+        document
+            .getElementById("predictionInfo")
+            .textContent =
+            "Ative o bot primeiro.";
+
+        return;
+
+    }
+
+
+    state.predictions++;
+
+
+    document
+        .getElementById("prediction")
+        .textContent =
+        "RESULTADO";
+
+
+    document
+        .getElementById("predictionInfo")
+        .textContent =
+        "Nova operação • Modelo "
+        + state.model
+        + " • Nº "
+        + state.predictions;
+
+}
+
+
+/*
+====================================================
+ENDEREÇO EXTERNO DE TESTE
+====================================================
+
+example.invalid é um domínio reservado
+para exemplos e não representa um servidor
+real do BOTGPT.
+====================================================
+*/
+
+function openExternal(url){
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+/*
+====================================================
+INICIALIZAÇÃO
+====================================================
+*/
+
+document
+    .getElementById("modelView")
+    .textContent =
+    state.model;
+
+
+document
+    .getElementById("stateView")
+    .textContent =
+    "Desativado";
+
+
+</script>
+
+</body>
+</html>
